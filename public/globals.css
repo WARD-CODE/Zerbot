@@ -1,0 +1,20 @@
+html, body, #root, * {
+  font-family: 'Gloria Hallelujah', cursive !important;
+}
+
+.zerbo6-logo-img {
+  filter: grayscale(1) brightness(1.2) contrast(1.2);
+  transition: filter 0.4s;
+}
+.zerbo6-logo-img:hover {
+  filter: none;
+}
+
+/* Sidebar and navbar icon buttons: gray by default, orange on hover */
+.sidebar-icon-btn, .navbar-icon-btn {
+  color: #A0AEC0 !important;
+  transition: color 0.3s;
+}
+.sidebar-icon-btn:hover, .navbar-icon-btn:hover {
+  color: #FF9900 !important;
+} 
