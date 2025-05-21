@@ -40,3 +40,14 @@ yarn-error.log*
 next-env.d.ts
 
 .idea
+
+# Python/Anaconda/venv
+Lib/
+Scripts/
+Include/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.conda/
+.anaconda/
