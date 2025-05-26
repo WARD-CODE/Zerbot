@@ -9,12 +9,34 @@ import {
   Avatar,
   VStack,
   useColorModeValue,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  Input,
+  Button,
+  Textarea,
+  Slider,
+  SliderTrack,
+  SliderFilledTrack,
+  SliderThumb,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Collapse,
+  IconButton,
 } from '@chakra-ui/react';
-import { FiPlus, FiClock, FiFolder, FiActivity, FiLogOut, FiSettings, FiMenu, FiChevronLeft, FiChevronRight, FiArrowLeft, FiArrowRight, FiMessageCircle } from 'react-icons/fi';
+import { FiPlus, FiClock, FiFolder, FiActivity, FiLogOut, FiSettings, FiMenu, FiChevronLeft, FiChevronRight, FiArrowLeft, FiArrowRight, FiMessageCircle, FiChevronDown } from 'react-icons/fi';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import PropTypes from 'prop-types';
 
 // Custom Spiral Icon (valid JSX)
 const SpiralIcon = (props: any) => (
@@ -23,10 +45,19 @@ const SpiralIcon = (props: any) => (
   </svg>
 );
 
-function Sidebar() {
+// Accept spinner state as props
+function Sidebar({ spinners, setSpinners, activeSpinner, setActiveSpinner }) {
   const [visible, setVisible] = useState(true);
   const [mounted, setMounted] = useState(false);
   const [toggleHovered, setToggleHovered] = useState(false);
+  const [isSpinnerModalOpen, setSpinnerModalOpen] = useState(false);
+  const [newSpinnerName, setNewSpinnerName] = useState('');
+  const [newSpinnerInstructions, setNewSpinnerInstructions] = useState('');
+  const [newSpinnerCreativity, setNewSpinnerCreativity] = useState(0.5);
+  const [newSpinnerWordFocus, setNewSpinnerWordFocus] = useState(5);
+  const [newSpinnerWordDiversity, setNewSpinnerWordDiversity] = useState(5);
+  const [newSpinnerMaxLength, setNewSpinnerMaxLength] = useState(1000);
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(true);
   useEffect(() => setMounted(true), []);
   const sidebarBg = useColorModeValue('white', 'navy.800');
   const textColor = useColorModeValue('gray.700', 'white');
@@ -51,6 +82,29 @@ function Sidebar() {
       )}
     </svg>
   );
+
+  // Handler for adding a new spinner
+  const handleAddSpinner = () => {
+    if (newSpinnerName.trim()) {
+      const newSpinner = {
+        name: newSpinnerName.trim(),
+        instructions: newSpinnerInstructions,
+        creativity: newSpinnerCreativity,
+        wordFocus: newSpinnerWordFocus,
+        wordDiversity: newSpinnerWordDiversity,
+        maxLength: newSpinnerMaxLength,
+      };
+      setSpinners([...spinners, newSpinner]);
+      setActiveSpinner(newSpinner.name);
+    }
+    setSpinnerModalOpen(false);
+    setNewSpinnerName('');
+    setNewSpinnerInstructions('');
+    setNewSpinnerCreativity(0.5);
+    setNewSpinnerWordFocus(5);
+    setNewSpinnerWordDiversity(5);
+    setNewSpinnerMaxLength(1000);
+  };
 
   if (!mounted) return null;
 
@@ -155,8 +209,8 @@ function Sidebar() {
           >
             <Flex align="center">
               <Icon as={FiMessageCircle} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
-                Usual Chat
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
+                Instant Chat
               </Text>
             </Flex>
             <Box ml={2} display="flex" alignItems="center" justifyContent="center">
@@ -183,7 +237,7 @@ function Sidebar() {
           >
             <Flex align="center">
               <Icon as={FiFolder} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
                 Projects
               </Text>
             </Flex>
@@ -208,10 +262,11 @@ function Sidebar() {
             _hover={{ bg: 'transparent' }}
             _active={{ bg: 'transparent' }}
             _focus={{ bg: 'transparent' }}
+            onClick={() => setSpinnerModalOpen(true)}
           >
             <Flex align="center">
               <Icon as={SpiralIcon} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
                 Spinners
               </Text>
             </Flex>
@@ -219,6 +274,160 @@ function Sidebar() {
               <Icon as={FiPlus} boxSize={5} color="gray.500" _groupHover={{ color: '#FF9900' }} />
             </Box>
           </Flex>
+          {/* Spinner List */}
+          <Box mt={2} ml={0} maxH="132px" overflowY="auto" p={0} w="100%">
+            {spinners.map((spinner) => (
+              <Flex
+                key={spinner.name}
+                align="center"
+                py={2}
+                px={4}
+                borderRadius="md"
+                cursor="pointer"
+                bg={activeSpinner === spinner.name ? 'rgba(255,153,0,0.10)' : 'transparent'}
+                _hover={{ bg: 'rgba(31,38,135,0.06)' }}
+                onClick={() => setActiveSpinner(spinner.name)}
+                transition="background 0.2s"
+                mb={0.5}
+                fontWeight={activeSpinner === spinner.name ? 'bold' : '500'}
+                fontSize="md"
+                letterSpacing="0.01em"
+                color={activeSpinner === spinner.name ? 'orange.700' : 'gray.700'}
+                position="relative"
+                pr={8}
+                role="group"
+                w="100%"
+              >
+                <Icon as={SpiralIcon} boxSize={6} mr={2} color="orange.400" />
+                <Text isTruncated maxW="170px">{spinner.name}</Text>
+              </Flex>
+            ))}
+          </Box>
+          {/* Spinner Creation Modal */}
+          <Modal isOpen={isSpinnerModalOpen} onClose={() => setSpinnerModalOpen(false)} isCentered size="lg">
+            <ModalOverlay />
+            <ModalContent bg="white" border="2px solid #FF9900" borderRadius="xl" boxShadow="lg">
+              <ModalHeader color="gray.700">Create New Spinner</ModalHeader>
+              <ModalCloseButton color="gray.500" />
+              <ModalBody>
+                <Box fontWeight="bold" fontSize="lg" color="gray.700" mb={2}>Basic Configuration</Box>
+                <Box mb={4}>
+                  <Text mb={1} fontWeight="medium" color="gray.700">Spinner Name</Text>
+                  <Input
+                    placeholder="Enter spinner name"
+                    value={newSpinnerName}
+                    onChange={(e) => setNewSpinnerName(e.target.value)}
+                    color="gray.700"
+                    borderColor="#FF9900"
+                    _focus={{ borderColor: '#FF9900', boxShadow: '0 0 0 1px #FF9900' }}
+                  />
+                </Box>
+                <Box mb={4}>
+                  <Text mb={1} fontWeight="medium" color="gray.700">System Instructions</Text>
+                  <Textarea
+                    placeholder="Enter system instructions for the spinner..."
+                    value={newSpinnerInstructions}
+                    onChange={(e) => setNewSpinnerInstructions(e.target.value)}
+                    color="gray.700"
+                    borderColor="#FF9900"
+                    _focus={{ borderColor: '#FF9900', boxShadow: '0 0 0 1px #FF9900' }}
+                    minH="100px"
+                  />
+                </Box>
+                <Flex align="center" justify="space-between" mb={2} cursor="pointer" onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}>
+                  <Box fontWeight="bold" fontSize="lg" color="gray.700">Advanced Configuration</Box>
+                  <IconButton
+                    aria-label="Toggle advanced configuration"
+                    icon={<FiChevronDown />}
+                    variant="ghost"
+                    size="sm"
+                    transform={isAdvancedOpen ? 'rotate(180deg)' : 'rotate(0deg)'}
+                    transition="transform 0.2s"
+                    color="gray.500"
+                  />
+                </Flex>
+                <Collapse in={isAdvancedOpen} animateOpacity>
+                  <Box pt={2}>
+                    <Text fontWeight="medium" color="gray.700" mb={1}>Creativity Level <span style={{ color: '#FF9900', fontWeight: 'bold' }}>{newSpinnerCreativity.toFixed(2)}</span></Text>
+                    <Slider
+                      value={newSpinnerCreativity}
+                      onChange={(val) => setNewSpinnerCreativity(val)}
+                      min={0}
+                      max={1}
+                      step={0.01}
+                      colorScheme="orange"
+                      mb={4}
+                    >
+                      <SliderTrack h="4px" bg="gray.100">
+                        <SliderFilledTrack bg="orange.400" />
+                      </SliderTrack>
+                      <SliderThumb boxSize={6} border="2px solid" borderColor="orange.400" />
+                    </Slider>
+                    <Flex align="center" mb={2}>
+                      <Text fontWeight="medium" color="gray.700" flex="1">Word Choice Focus</Text>
+                      <NumberInput
+                        value={newSpinnerWordFocus}
+                        onChange={(_, val) => setNewSpinnerWordFocus(val)}
+                        min={1}
+                        max={10}
+                        color="gray.700"
+                        w="120px"
+                      >
+                        <NumberInputField borderColor="#FF9900" _focus={{ borderColor: '#FF9900', boxShadow: '0 0 0 1px #FF9900' }} textAlign="center" fontWeight="bold" />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper color="#FF9900" />
+                          <NumberDecrementStepper color="#FF9900" />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </Flex>
+                    <Flex align="center" mb={2}>
+                      <Text fontWeight="medium" color="gray.700" flex="1">Word Diversity</Text>
+                      <NumberInput
+                        value={newSpinnerWordDiversity}
+                        onChange={(_, val) => setNewSpinnerWordDiversity(val)}
+                        min={1}
+                        max={10}
+                        color="gray.700"
+                        w="120px"
+                      >
+                        <NumberInputField borderColor="#FF9900" _focus={{ borderColor: '#FF9900', boxShadow: '0 0 0 1px #FF9900' }} textAlign="center" fontWeight="bold" />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper color="#FF9900" />
+                          <NumberDecrementStepper color="#FF9900" />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </Flex>
+                    <Flex align="center" mb={2}>
+                      <Text fontWeight="medium" color="gray.700" flex="1">Maximum Response Length</Text>
+                      <NumberInput
+                        value={newSpinnerMaxLength}
+                        onChange={(_, val) => setNewSpinnerMaxLength(val)}
+                        min={100}
+                        max={2000}
+                        step={100}
+                        color="gray.700"
+                        w="120px"
+                      >
+                        <NumberInputField borderColor="#FF9900" _focus={{ borderColor: '#FF9900', boxShadow: '0 0 0 1px #FF9900' }} textAlign="center" fontWeight="bold" />
+                        <NumberInputStepper>
+                          <NumberIncrementStepper color="#FF9900" />
+                          <NumberDecrementStepper color="#FF9900" />
+                        </NumberInputStepper>
+                      </NumberInput>
+                    </Flex>
+                  </Box>
+                </Collapse>
+              </ModalBody>
+              <ModalFooter>
+                <Button colorScheme="orange" bg="#FF9900" color="white" mr={3} onClick={handleAddSpinner} _hover={{ bg: '#ffae42' }}>
+                  Add
+                </Button>
+                <Button colorScheme="orange" bg="#FF9900" color="white" onClick={() => setSpinnerModalOpen(false)} _hover={{ bg: '#ffae42' }}>
+                  Cancel
+                </Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Box>
         {/* Bottom Bar */}
         {visible ? (
@@ -254,6 +463,13 @@ function Sidebar() {
     </Box>
   );
 }
+
+Sidebar.propTypes = {
+  spinners: PropTypes.array.isRequired,
+  setSpinners: PropTypes.func.isRequired,
+  activeSpinner: PropTypes.string,
+  setActiveSpinner: PropTypes.func.isRequired,
+};
 
 // Accept fontSize and iconSize props for SidebarLink
 function SidebarLink({ icon, label, fontSize = { base: 'xl', md: '2xl', lg: '3xl' }, iconSize = { base: 7, md: 8, lg: 10 } }: { icon: any; label: string; fontSize?: any; iconSize?: any }) {

@@ -19,6 +19,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { SearchIcon } from '@chakra-ui/icons';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import { ChevronDownIcon } from '@chakra-ui/icons';
 
 export default function AdminNavbar() {
   const textColor = useColorModeValue('gray.700', 'white');
@@ -41,6 +42,31 @@ export default function AdminNavbar() {
       zIndex="100"
     >
       <Flex align="center" justify="flex-end" gap="20px" h="100%">
+        {/* Model version dropdown */}
+        <Menu>
+          <MenuButton
+            as={Box}
+            cursor="pointer"
+            color="#FF9900"
+            fontWeight="bold"
+            fontSize="lg"
+            px="8px"
+            py="2px"
+            bg="transparent"
+            border="none"
+            _hover={{ color: '#FF9900', bg: 'transparent' }}
+            _active={{ color: '#FF9900', bg: 'transparent' }}
+            _focus={{ boxShadow: 'none', outline: 'none' }}
+            display="flex"
+            alignItems="center"
+          >
+            Zerbo6 1.0 <ChevronDownIcon color="#FF9900" ml={1} />
+          </MenuButton>
+          <MenuList minW="160px" borderRadius="xl" boxShadow="md">
+            <MenuItem fontWeight="bold" color="#FF9900">Zerbo6 1.0</MenuItem>
+            <MenuItem fontWeight="bold" color="#FF9900">LaMA (soon)</MenuItem>
+          </MenuList>
+        </Menu>
         {/* Icons */}
         <Icon as={MdOutlineInfo} color={iconColor} w="10" h="10" className="navbar-icon-btn" />
         <Menu>

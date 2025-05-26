@@ -4,6 +4,7 @@
 import React, { ReactNode } from 'react';
 import { Box, Flex } from '@chakra-ui/react';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 
 import AppWrappers from './AppWrappers';
 import Sidebar from '@/components/sidebar/Sidebar';
@@ -11,6 +12,7 @@ import Navbar from '@/components/navbar/NavbarAdmin';
 import Footer from '@/components/footer/FooterAdmin';
 import routes from '@/routes';
 import { AuthProvider } from '@/context/AuthContext';
+import ChatPage from './page';
 
 import '@/styles/App.css';
 import '@/styles/Contact.css';
@@ -23,6 +25,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
 
   const isAuthPage = pathname === '/login' || pathname === '/signup';
 
+  // Spinner state lifted to layout
+  const [spinners, setSpinners] = useState([]);
+  const [activeSpinner, setActiveSpinner] = useState(null);
+
   return (
     <html lang="en">
       <body id="root" style={{ overflow: 'hidden', height: '100vh', background: 'transparent' }}>
@@ -32,7 +38,12 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               children
             ) : (
               <Flex direction="row" height="100vh" overflow="hidden">
-                <Sidebar routes={routes} />
+                <Sidebar
+                  spinners={spinners}
+                  setSpinners={setSpinners}
+                  activeSpinner={activeSpinner}
+                  setActiveSpinner={setActiveSpinner}
+                />
                 <Flex
                   direction="column"
                   flex="1"
@@ -63,7 +74,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                     justifyContent="center"
                     overflow="hidden"
                   >
-                    {children}
+                    <ChatPage activeSpinner={activeSpinner} />
                   </Box>
                   <Box
                     pt="0.5px"
