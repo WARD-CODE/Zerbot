@@ -36,7 +36,7 @@ export default function ChatPage({ activeSpinner }: { activeSpinner: any }) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const prevSpinnerRef = useRef(activeSpinner);
 
-  const textColor = useColorModeValue('navy.700', 'white');
+  const textColor = useColorModeValue('gray.500', 'whiteAlpha.600');
   const gray = useColorModeValue('gray.500', 'whiteAlpha.600');
 
   // Determine title and placeholder based on activeSpinner

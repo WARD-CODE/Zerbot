@@ -209,8 +209,8 @@ function Sidebar({ spinners, setSpinners, activeSpinner, setActiveSpinner }) {
           >
             <Flex align="center">
               <Icon as={FiMessageCircle} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
-                Instant Chat
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
+                Usual Chat
               </Text>
             </Flex>
             <Box ml={2} display="flex" alignItems="center" justifyContent="center">
@@ -237,7 +237,7 @@ function Sidebar({ spinners, setSpinners, activeSpinner, setActiveSpinner }) {
           >
             <Flex align="center">
               <Icon as={FiFolder} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
                 Projects
               </Text>
             </Flex>
@@ -266,7 +266,7 @@ function Sidebar({ spinners, setSpinners, activeSpinner, setActiveSpinner }) {
           >
             <Flex align="center">
               <Icon as={SpiralIcon} boxSize={7} mr={2} color="gray.500" _groupHover={{ color: '#FF9900' }} />
-              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.400" mb="2" _groupHover={{ color: '#FF9900' }}>
+              <Text fontSize={{ base: 'md', md: 'lg', lg: 'xl' }} fontWeight="semibold" color="gray.700" mb="2" _groupHover={{ color: '#FF9900' }}>
                 Spinners
               </Text>
             </Flex>
