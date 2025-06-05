@@ -28,6 +28,7 @@
     "endent": "^2.1.0",
     "eventsource-parser": "^1.0.0",
     "framer-motion": "^4.1.17",
+    "horizon-ai-template-pro": "file:",
     "next": "^15.1.6",
     "react": "^19.0.0-rc.1",
     "react-custom-scrollbars-2": "^4.2.1",
